@@ -136,6 +136,3 @@ graph TD
 - Exclude patterns are passed directly to `tar --exclude` (globs supported)
 
 ---
-
-## 📄 License
-MIT
