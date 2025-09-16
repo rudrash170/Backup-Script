@@ -12,7 +12,16 @@ CONFIG_FILE="${SCRIPT_DIR}/config.yaml"
 parse_yaml() {
     python3 - "$1" <<'PY'
 import sys, yaml, shlex
-cfg = yaml.safe_load(open(sys.argv[1])) or {}
+path = sys.argv[1]
+try:
+    # utf-8-sig handles potential BOM
+    with open(path, 'r', encoding='utf-8-sig') as fh:
+        raw = fh.read()
+    cfg = yaml.safe_load(raw) or {}
+except Exception as e:
+    sys.stderr.write(f"YAML_PARSE_ERROR: {e}\n")
+    sys.stderr.write("Hint: On Windows, escape backslashes (C:\\Path\\To) or use forward slashes (C:/Path/To) and avoid tabs.\n")
+    sys.exit(7)
 
 def emit(k, v):
     if isinstance(v, bool):
