@@ -12,10 +12,9 @@ CONFIG_FILE="${SCRIPT_DIR}/config.yaml"
 parse_yaml() {
     python3 - "$1" <<'PY'
 import sys, yaml, shlex
-path = sys.argv[1]
 try:
     # utf-8-sig handles potential BOM
-    with open(path, 'r', encoding='utf-8-sig') as fh:
+    with open(sys.argv[1], 'r', encoding='utf-8-sig') as fh:
         raw = fh.read()
     cfg = yaml.safe_load(raw) or {}
 except Exception as e:
@@ -130,13 +129,24 @@ if [ "$1" = "--run-backup" ]; then
 
     log "INFO: Backup process finished."
 
-    # --- Email Alert (delegated entirely to Python script) ---
-    if [ -f "$SCRIPT_DIR/send_email.py" ]; then
-        if ! "$PYTHON_BIN" "$SCRIPT_DIR/send_email.py" --config "$CONFIG_FILE" --log "$LOG_FILE"; then
-            log "WARN: Email script reported an error"
+    # --- Email Alert ---
+    if [ "${EMAIL_ENABLED}" = "true" ]; then
+        if [ -n "${EMAIL_TO:-}" ] && [ -n "${EMAIL_FROM:-}" ]; then
+            if [ -f "$SCRIPT_DIR/send_email.py" ]; then
+                "$PYTHON_BIN" "$SCRIPT_DIR/send_email.py" \
+                   --to "$EMAIL_TO" \
+                   --from "$EMAIL_FROM" \
+                   --smtp-server "${EMAIL_SMTP_SERVER:-$SMTP_SERVER}" \
+                   --smtp-port "${EMAIL_SMTP_PORT:-$SMTP_PORT}" \
+                   --user "${EMAIL_USER:-$SMTP_USER}" \
+                   --pass "${EMAIL_PASS:-$SMTP_PASS}" \
+                   --log "$LOG_FILE" || log "WARN: Email send failed"
+            else
+                log "WARN: Email enabled but send_email.py not found."
+            fi
+        else
+            log "WARN: Email enabled but EMAIL_TO or EMAIL_FROM missing."
         fi
-    else
-        log "INFO: Email script not present; skipping notification"
     fi
     exit 0
 fi

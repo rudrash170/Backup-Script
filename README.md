@@ -73,12 +73,12 @@ graph TD
 
 ## 🚦 Usage
 1. **Edit `config.yaml`**
-    - Set `SOURCE_DIR` as a YAML list of directories you want to back up, e.g.:
-       ```yaml
-       SOURCE_DIR:
-          - /var/www/site
-          - /etc/nginx
-       ```
+   - Set `SOURCE_DIR` as a YAML list of directories you want to back up, e.g.:
+     ```yaml
+     SOURCE_DIR:
+       - /var/www/site
+       - /etc/nginx
+     ```
    - Set `NAS_PATH` to your mounted NAS backup location
    - Adjust other settings as needed
 
@@ -106,16 +106,16 @@ graph TD
 - Bash only invokes `send_email.py`; all SMTP/auth logic lives in Python now.
 - The log file content becomes the email body.
 - Example config section:
-   ```yaml
-   EMAIL:
-      ENABLED: true
-      TO: you@example.com
-      FROM: backup@example.com
-      SMTP_SERVER: smtp.example.com
-      SMTP_PORT: 587
-      USER: smtpuser
-      PASS: smtppassword
-   ```
+  ```yaml
+  EMAIL:
+    ENABLED: true
+    TO: you@example.com
+    FROM: backup@example.com
+    SMTP_SERVER: smtp.example.com
+    SMTP_PORT: 587
+    USER: smtpuser
+    PASS: smtppassword
+  ```
 
 ---
 
@@ -124,7 +124,7 @@ graph TD
 - Bash (Linux) or PowerShell (Windows)
 - `tar`, `gzip`, `sha256sum` utilities
 - NAS share must be mounted and writable
- - (Optional) `flock` for concurrency guard on Linux
+- (Optional) `flock` for concurrency guard on Linux
 
 ---
 
@@ -132,8 +132,8 @@ graph TD
 - The script only backs up files, not databases
 - Old backup files in the local temp directory are deleted after the specified retention period
 - For restoring, simply extract the `.tar.gz` file from your NAS backup location
- - If multiple source directories don't share the same parent, the archive will store absolute paths
- - Exclude patterns are passed directly to `tar --exclude` (globs supported)
+- If multiple source directories don't share the same parent, the archive will store absolute paths
+- Exclude patterns are passed directly to `tar --exclude` (globs supported)
 
 ---
 
