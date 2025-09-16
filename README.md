@@ -1,5 +1,9 @@
 # 🚀 Automated File Backup to NAS
 
+>This project provides a robust, easy-to-use solution for daily automated backups of a file directory to a NAS (Network Attached Storage) share, with logging, integrity checks, incremental backups, and optional email alerts.
+
+---
+
 ## 🏷️ Script Flags
 
 `nas_backup.sh` supports the following flags:
@@ -24,8 +28,6 @@ Set up a daily Task Scheduler job (Windows):
 ```bash
 ./nas_backup.sh --setup-task
 ```
-
->This project provides a robust, easy-to-use solution for daily automated backups of a file directory to a NAS (Network Attached Storage) share, with logging, integrity checks, incremental backups, and optional email alerts.
 
 ---
 
@@ -56,8 +58,8 @@ Set up a daily Task Scheduler job (Windows):
 ```mermaid
 graph TD
     A[Start: Scheduled or Manual Run] --> B[Load config.yaml]
-    B --> C[Create Incremental Archive (backup.py)]
-    C --> D[Copy Archive to NAS]
+    B --> C1[Create Incremental Archive backup.py]
+    C1 --> D[Copy Archive to NAS]
     D --> E[Verify SHA256 Checksum]
     E --> F[Log Actions]
     F --> G[Cleanup Old Local Backups]
@@ -93,7 +95,7 @@ graph TD
 4. **Schedule with cron (Linux) or Task Scheduler (Windows)**
    - **Linux:** Add a line to your crontab (e.g., to run daily at 2am):
      ```bash
-     0 2 * * * /path/to/nas_backup.sh
+     0 2 * * * /path/to/nas_backup.sh --run-backup
      ```
    - **Windows:** Use Task Scheduler to run the script at your chosen time
 
