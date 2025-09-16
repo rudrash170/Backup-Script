@@ -1,4 +1,4 @@
----
+# 🚀 Automated File Backup to NAS
 
 ## 🏷️ Script Flags
 
@@ -24,8 +24,6 @@ Set up a daily Task Scheduler job (Windows):
 ```bash
 ./nas_backup.sh --setup-task
 ```
-
-# 🚀 Automated File Backup to NAS
 
 >This project provides a robust, easy-to-use solution for daily automated backups of a file directory to a NAS (Network Attached Storage) share, with logging, integrity checks, incremental backups, and optional email alerts.
 
